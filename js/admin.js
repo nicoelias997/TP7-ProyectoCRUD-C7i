@@ -1,7 +1,8 @@
 import { Pelicula } from "./classPelicula.js";
 import {validarTitulo, validarDescription, validarImagen, validarGenero} from "./helpers.js"
 
-let listaPeliculas = []; //aqui voy a guardar todas las peliculas
+let listaPeliculas = [];
+ //aqui voy a guardar todas las peliculas
 //AGregamos una funcion que nos muestre las pelis cuando se cargue la pagina 
 
 const cargaInicial = () => {
@@ -77,15 +78,17 @@ function guardarPelicula(e){
     guardarPeliculasEnLocalStorage();
     crearLista(nuevaPelicula)
    //limpiar formulario
-   limpiarFormulario();
    console.log(listaPeliculas);
    //cerrar la ventana modal
    modalAdminPelicula.hide();
+   limpiarFormulario();
+
     }
 }
 
 function limpiarFormulario(){
     formPelicula.reset()
+
     // modificar las clases de bootstrap si es necesario
 }
 
@@ -94,21 +97,53 @@ function guardarPeliculasEnLocalStorage(){
 }
 
 window.borrarPelicula = function (codigo){
-    console.log(codigo)
-    //buscar la pelicula en el arreglo y borrarla
-    let copiaListaPeliculas = listaPeliculas.filter((itemPelicula)=> itemPelicula.codigo != codigo);
-    listaPeliculas = copiaListaPeliculas;
-    //actualizar el localstorage
-    guardarPeliculasEnLocalStorage();
-    //actualizar la tabla
-    borrarTabla();
-    cargarInicial();
+    
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      })
+      
+      swalWithBootstrapButtons.fire({
+        title: 'Estas seguro que deseas eliminar ?',
+        text: "No podras revertir los cambios!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+        //buscar la pelicula en el arreglo y borrarla
+        let copiaListaPeliculas = listaPeliculas.filter((itemPelicula)=> itemPelicula.codigo != codigo);
+        listaPeliculas = copiaListaPeliculas;
+        //actualizar el localstorage
+        guardarPeliculasEnLocalStorage();
+        //actualizar la tabla
+        borrarTabla();
+        cargaInicial();
+
+          swalWithBootstrapButtons.fire(
+            'Eliminado!'
+          )
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire(
+            "Ahora podras ver tu pelicula nuevamente!"
+          )
+        }
+      })
+    
+    
 }
 
 function borrarTabla(){
     let tablaPeliculas = document.querySelector('#tablaPeliculas');
     tablaPeliculas.innerHTML = '';
-    cargaInicial();
 
 }
 

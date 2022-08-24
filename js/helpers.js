@@ -3,7 +3,6 @@ export function validarTitulo(titulo){
         titulo.className = 'form-control is-valid';
         return true;
     }else{
-        console.log('dato invalido');
         titulo.className = 'form-control is-invalid';
         return false;
     }
@@ -12,7 +11,7 @@ export function validarTitulo(titulo){
 
 export function validarImagen(imagen){
 
-   let patron = /(?:(?:https?:\/\/))[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/=]*(\.jpg|\.png|\.jpeg))/g
+   let patron = /([0-9a-zA-Z\._-]+.(png|PNG|gif|GIF|jp[e]?g|JP[E]?G))/g
 
     if(patron.test(imagen.value)){
         imagen.className = 'form-control is-valid';
@@ -35,11 +34,9 @@ export function validarDescription(descripcion){
 }
 
 export function validarGenero(genero){
-    if(genero.value !== "Selecione una opcion"){
-        genero.className = "form-control is-valid"
+        if(genero.value !== ""){
         return true
     } else {
-        genero.className = "form-control is-invalid"
         return false
     }
 }
