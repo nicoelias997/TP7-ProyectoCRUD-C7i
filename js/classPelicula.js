@@ -1,9 +1,9 @@
 export class Pelicula {
-    constructor(codigo, titulo, descripcion, image, genero){
+    constructor(codigo, titulo, descripcion, imagen, genero){
         this.codigo = codigo;
         this.titulo = titulo;
         this.descripcion = descripcion;
-        this.image = image;
+        this.imagen = imagen;
         this.genero = genero;
     }
 }

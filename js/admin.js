@@ -32,7 +32,6 @@ function crearLista(pelicula){
       </button>
     </td>
   </tr>`
-    console.log(tablaPeliculas)
 }
 
 
@@ -72,13 +71,11 @@ function guardarPelicula(e){
     if(validarTitulo(titulo) && validarDescription(descripcion) && validarImagen(imagen) && validarGenero(genero)){
    //si los datos son correctos
    let nuevaPelicula =  new Pelicula(codigo.value, titulo.value, descripcion.value, imagen.value, genero.value);
-   console.log(nuevaPelicula)
    listaPeliculas.push(nuevaPelicula);
    //Ahora guardaremos las pelis en el navegador (Local storage)
     guardarPeliculasEnLocalStorage();
     crearLista(nuevaPelicula)
    //limpiar formulario
-   console.log(listaPeliculas);
    //cerrar la ventana modal
    modalAdminPelicula.hide();
    limpiarFormulario();
