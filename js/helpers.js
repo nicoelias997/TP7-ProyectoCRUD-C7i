@@ -1,6 +1,5 @@
 export function validarTitulo(titulo){
     if( titulo.value.trim().length >= 1 && titulo.value.trim().length <=50 ){
-        console.log('dato valido');
         titulo.className = 'form-control is-valid';
         return true;
     }else{
@@ -37,10 +36,10 @@ export function validarDescription(descripcion){
 
 export function validarGenero(genero){
     if(genero.value !== ""){
-        genero.className = "form-control is-valid"
+        genero.className = "form-control is-invalid"
         return true
     } else {
-        genero.className = "form-control is-invalid"
+        genero.className = "form-control is-valid"
         return false
     }
 }
