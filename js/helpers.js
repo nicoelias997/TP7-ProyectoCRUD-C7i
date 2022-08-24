@@ -11,10 +11,10 @@ export function validarTitulo(titulo){
 
 export function validarImagen(imagen){
 
-   let patron = /([0-9a-zA-Z\._-]+.(png|PNG|gif|GIF|jp[e]?g|JP[E]?G))/g
+   let patron = /^(ftp|http|https):\/\/[^ "]+$/
 
     if(patron.test(imagen.value)){
-        imagen.className = 'form-control is-valid';
+        imagen.className = 'form-control is-valid text-truncate';        
         return true;
     }else{
         imagen.className = 'form-control is-invalid';
@@ -25,7 +25,7 @@ export function validarImagen(imagen){
 export function validarDescription(descripcion){
     let expReg = /^[a-zA-Z0-9][a-zA-Z0-9\s]+$/ig;
     if(expReg.test(descripcion.value)){
-        descripcion.className = 'form-control is-valid';
+        descripcion.className = 'form-control is-valid text-truncate';
         return true;
     }else{
         descripcion.className = 'form-control is-invalid';
@@ -34,9 +34,11 @@ export function validarDescription(descripcion){
 }
 
 export function validarGenero(genero){
-        if(genero.value !== ""){
-        return true
+        if(genero.value == ""){
+            genero.className = "form-control is-invalid"
+            return false
     } else {
-        return false
+        genero.className = "form-control is-valid"
+        return true
     }
 }

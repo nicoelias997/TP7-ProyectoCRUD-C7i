@@ -88,6 +88,10 @@ function guardarPelicula(e){
 
 function limpiarFormulario(){
     formPelicula.reset()
+    titulo.className = "form-control"
+    descripcion.className = "form-control"
+    imagen.className = "form-control"
+    genero.className = "form-control"
 
     // modificar las clases de bootstrap si es necesario
 }
