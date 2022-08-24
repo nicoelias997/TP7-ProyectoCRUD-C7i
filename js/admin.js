@@ -24,9 +24,52 @@ function crearLista(pelicula){
     <td>${pelicula.imagen}</td>
     <td>${pelicula.genero}</td>
     <td>
-      <button class="btn btn-warning" >
-        <i class="bi bi-pencil-square" onclick='editarPelicula("${pelicula.codigo}")'></i>
+      <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal" id="ventanaModal">
+       <i class="bi bi-pencil-square"></i>
       </button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Editar pelicula</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="mb-3">
+          <label for="tituloNuevo"  class="col-form-label">Titulo:</label>
+          <input type="text" class="form-control" id="tituloNuevo">
+        </div>
+        <div class="mb-3">
+          <label for="descripcionNueva"  class="col-form-label">Descripcion:</label>
+          <input type="text" class="form-control" id="descripcionNueva">
+        </div>
+        <div class="mb-3">
+          <label for="imagenNueva"  class="col-form-label">Imagen:</label>
+          <input type="text" class="form-control" id="imagenNueva">
+        </div>
+        <div class="mb-3">
+                <label for="generoNuevo">Genero</label>
+                <select id="generoNuevo" class="form-control">
+                  <option value="">Selecione una opcion</option>
+                  <option value="accion">Accion</option>
+                  <option value="drama">Drama</option>
+                  <option value="comedia">Comedia</option>
+                  <option value="aventura">Aventura</option>
+                </select>
+              </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      <button type="submit" class="btn btn-primary" onclick='editarPelicula("${pelicula.codigo}")'>Editar</button>
+    </div>
+  </div>
+</div>
+</div>
+
+
       <button class="btn btn-danger" onclick='borrarPelicula("${pelicula.codigo}")'>
         <i class="bi bi-x-square"></i>
       </button>
@@ -51,7 +94,7 @@ const modalAdminPelicula = new bootstrap.Modal(document.querySelector('#modalPel
 titulo.addEventListener('blur',()=>{validarTitulo(titulo)});
 descripcion.addEventListener('blur',()=>{validarDescription(descripcion)});
 imagen.addEventListener('blur',()=>{validarImagen(imagen)})
-genero.addEventListener('blur',()=>{validarImagen(genero)})
+genero.addEventListener('blur',()=>{validarGenero(genero)})
 
 
 btnCrearPelicula.addEventListener('click', crearPelicula);
@@ -145,9 +188,44 @@ function borrarTabla(){
     tablaPeliculas.innerHTML = '';
 
 }
+
+
 window.editarPelicula = function(codigo){
-    console.log("hola")
-    guardarPeliculasEnLocalStorage();
+
+    let peliculaAEditar = listaPeliculas.filter((pelicula)=> pelicula.codigo == codigo);
+
+    let tituloNuevo = document.getElementById("tituloNuevo")
+    tituloNuevo.addEventListener('blur',()=>{validarTitulo(tituloNuevo)});
+
+    let descripcionNueva = document.getElementById("descripcionNueva")
+    descripcionNueva.addEventListener('blur',()=>{validarTitulo(descripcionNueva)});
+
+    let imagenNueva = document.getElementById("imagenNueva")
+    imagenNueva.addEventListener('blur',()=>{validarTitulo(imagenNueva)});
+
+    let generoNuevo = document.getElementById("generoNuevo")
+    generoNuevo.addEventListener('blur',()=>{validarTitulo(generoNuevo)});
+
+    let ventanaModal = new bootstrap.Modal(document.getElementById("exampleModal"))
+
+    if(validarTitulo(tituloNuevo) && validarDescription(descripcionNueva) && validarImagen(imagenNueva) &&validarGenero(generoNuevo)){
+
+    peliculaAEditar.titulo = tituloNuevo.value;
+    peliculaAEditar.descripcion = descripcionNueva.value;
+    peliculaAEditar.imagen = imagenNueva.value;
+    peliculaAEditar.genero = generoNuevo.value;
+    
+    tituloNuevo.className = "form-control"
+    descripcionNueva.className = "form-control"
+    imagenNueva.className = "form-control"
+    generoNuevo.className = "form-control"
+
+
+    guardarPeliculasEnLocalStorage()   
+    ventanaModal.hide()
+    cargaInicial()
+
+    }
 
 }
 
