@@ -91,4 +91,8 @@ function limpiarFormulario(){
 function guardarPeliculasEnLocalStorage(){
     localStorage.setItem('listaPeliculasKey', JSON.stringify(listaPeliculas));
 }
+
+window.borrarPelicula = function(codigo){
+    console.log(codigo)
+}
 cargaInicial();

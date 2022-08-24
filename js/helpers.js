@@ -35,11 +35,11 @@ export function validarDescription(descripcion){
 }
 
 export function validarGenero(genero){
-    if(genero.value !== ""){
-        genero.className = "form-control is-invalid"
+    if(genero.value !== "Selecione una opcion"){
+        genero.className = "form-control is-valid"
         return true
     } else {
-        genero.className = "form-control is-valid"
+        genero.className = "form-control is-invalid"
         return false
     }
 }
