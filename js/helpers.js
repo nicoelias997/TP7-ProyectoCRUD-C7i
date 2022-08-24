@@ -14,7 +14,7 @@ export function validarImagen(imagen){
    let patron = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
 
     if(patron.test(imagen.value)){
-        imagen.className = 'form-control is-valid';        
+        imagen.className = 'form-control is-valid text-truncate'; 
         return true;
     }else{
         imagen.className = 'form-control is-invalid';

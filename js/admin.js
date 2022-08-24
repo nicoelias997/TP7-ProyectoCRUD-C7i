@@ -25,7 +25,7 @@ function crearLista(pelicula){
     <td>${pelicula.genero}</td>
     <td>
       <button class="btn btn-warning" >
-        <i class="bi bi-pencil-square"></i>
+        <i class="bi bi-pencil-square" onclick='editarPelicula("${pelicula.codigo}")'></i>
       </button>
       <button class="btn btn-danger" onclick='borrarPelicula("${pelicula.codigo}")'>
         <i class="bi bi-x-square"></i>
@@ -138,13 +138,16 @@ window.borrarPelicula = function (codigo){
           )
         }
       })
-    
-    
 }
 
 function borrarTabla(){
     let tablaPeliculas = document.querySelector('#tablaPeliculas');
     tablaPeliculas.innerHTML = '';
+
+}
+window.editarPelicula = function(codigo){
+    console.log("hola")
+    guardarPeliculasEnLocalStorage();
 
 }
 
