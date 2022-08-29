@@ -5,6 +5,9 @@ let listaPeliculas = [];
  //aqui voy a guardar todas las peliculas
 //AGregamos una funcion que nos muestre las pelis cuando se cargue la pagina 
 
+//variable para ejecutar la funcion que crea peliculas o la que actualiza
+let peliculaNueva = true; // si peliculaNueva es true creo una pelicula, caso contrario actualizo
+
 const cargaInicial = () => {
     listaPeliculas = JSON.parse(localStorage.getItem("listaPeliculasKey")) || [];
     if(listaPeliculas.length > 0){
@@ -24,57 +27,14 @@ function crearLista(pelicula){
     <td>${pelicula.imagen}</td>
     <td>${pelicula.genero}</td>
     <td>
-      <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal" id="ventanaModal">
-       <i class="bi bi-pencil-square"></i>
-      </button>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel">Editar pelicula</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-      <form>
-        <div class="mb-3">
-          <label for="tituloNuevo"  class="col-form-label">Titulo:</label>
-          <input type="text" class="form-control" id="tituloNuevo">
-        </div>
-        <div class="mb-3">
-          <label for="descripcionNueva"  class="col-form-label">Descripcion:</label>
-          <input type="text" class="form-control" id="descripcionNueva">
-        </div>
-        <div class="mb-3">
-          <label for="imagenNueva"  class="col-form-label">Imagen:</label>
-          <input type="text" class="form-control" id="imagenNueva">
-        </div>
-        <div class="mb-3">
-                <label for="generoNuevo">Genero</label>
-                <select id="generoNuevo" class="form-control">
-                  <option value="">Selecione una opcion</option>
-                  <option value="accion">Accion</option>
-                  <option value="drama">Drama</option>
-                  <option value="comedia">Comedia</option>
-                  <option value="aventura">Aventura</option>
-                </select>
-              </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-      <button type="submit" class="btn btn-primary" onclick='editarPelicula("${pelicula.codigo}")'>Editar</button>
-    </div>
-  </div>
-</div>
-</div>
-
-
-      <button class="btn btn-danger" onclick='borrarPelicula("${pelicula.codigo}")'>
-        <i class="bi bi-x-square"></i>
-      </button>
-    </td>
-  </tr>`
+    <button class="btn btn-warning" onclick='editarPelicula("${pelicula.codigo}")' >
+    <i class="bi bi-pencil-square"></i>
+  </button>
+  <button class="btn btn-danger" onclick='borrarPelicula("${pelicula.codigo}")'>
+    <i class="bi bi-x-square"></i>
+  </button>
+</td>
+</tr>`;
 }
 
 
@@ -101,21 +61,14 @@ btnCrearPelicula.addEventListener('click', crearPelicula);
 formPelicula.addEventListener('submit', guardarPelicula);
 
 function crearPelicula(){
-  borrarTabla();
-  cargarInicial();
-  //mostrar un mensaje intuitivo para el usuario
-  Swal.fire(
-    'Pelicula actualizada',
-    'Los datos de la pelicula seleccionada fueron actualizados',
-    'success'
-  )
-  //cerrar la ventana modal
-  modalAdminPelicula.hide();
-  //limpiar el formulario
+  peliculaNueva = true;
   limpiarFormulario();
-
-}
-
+    //mostrar ventana modal
+    modalAdminPelicula.show();
+    //generar el identificador unico y asignarlo al campo del codigo
+    codigo.value = uuidv4();
+    // console.log( uuidv4()); esta libreria genera identificadores unicos
+}   
 
 function guardarPelicula(e){
     e.preventDefault();
@@ -199,43 +152,50 @@ function borrarTabla(){
 }
 
 
-window.editarPelicula = function(codigo){
+window.editarPelicula = function (codigoBuscado) {
+  // console.log(codigoBuscado)
+  //cambiar el estado de la variable booleada peliculaNueva
+  peliculaNueva = false;
+  //buscar dentro del arreglo la pelicula que quiero editar
+  // let peliculaBuscada = listaPeliculas.find((pelicula)=> {return pelicula.codigo === codigo})
+  let peliculaBuscada = listaPeliculas.find(
+    (pelicula) => pelicula.codigo === codigoBuscado
+  ); //return implicito
+  console.log(peliculaBuscada);
+  //mostrar la ventana modal con el formulario cargado con todos los datos de la pelicula que selecciono el usuario
+  modalAdminPelicula.show();
+  codigo.value = peliculaBuscada.codigo;
+  titulo.value = peliculaBuscada.titulo;
+  descripcion.value = peliculaBuscada.descripcion;
+  imagen.value = peliculaBuscada.imagen;
+  genero.value = peliculaBuscada.genero;
+};
 
-    let peliculaAEditar = listaPeliculas.filter((pelicula)=> pelicula.codigo == codigo);
-
-    let tituloNuevo = document.getElementById("tituloNuevo")
-    tituloNuevo.addEventListener('blur',()=>{validarTitulo(tituloNuevo)});
-
-    let descripcionNueva = document.getElementById("descripcionNueva")
-    descripcionNueva.addEventListener('blur',()=>{validarTitulo(descripcionNueva)});
-
-    let imagenNueva = document.getElementById("imagenNueva")
-    imagenNueva.addEventListener('blur',()=>{validarTitulo(imagenNueva)});
-
-    let generoNuevo = document.getElementById("generoNuevo")
-    generoNuevo.addEventListener('blur',()=>{validarTitulo(generoNuevo)});
-
-    let ventanaModal = new bootstrap.Modal(document.getElementById("exampleModal"))
-
-    if(validarTitulo(tituloNuevo) && validarDescription(descripcionNueva) && validarImagen(imagenNueva) &&validarGenero(generoNuevo)){
-
-    peliculaAEditar.titulo = tituloNuevo.value;
-    peliculaAEditar.descripcion = descripcionNueva.value;
-    peliculaAEditar.imagen = imagenNueva.value;
-    peliculaAEditar.genero = generoNuevo.value;
-    
-    tituloNuevo.className = "form-control"
-    descripcionNueva.className = "form-control"
-    imagenNueva.className = "form-control"
-    generoNuevo.className = "form-control"
-
-
-    guardarPeliculasEnLocalStorage()   
-    ventanaModal.hide()
-    cargaInicial()
-
-    }
+function actualizarPelicula() {
+  console.log("actualizando pelicula...");
+  //tomar todos los datos cargados del formulario, buscar el objeto que estoy mostrando en el formulario y actualizar sus valores
+  let posicionPeliBuscada= listaPeliculas.findIndex((pelicula)=> codigo.value === pelicula.codigo )
+  console.log(posicionPeliBuscada);
+  //modificar los valores dentro del arreglo
+  listaPeliculas[posicionPeliBuscada].titulo = titulo.value;
+  listaPeliculas[posicionPeliBuscada].descripcion = descripcion.value;
+  listaPeliculas[posicionPeliBuscada].imagen = imagen.value;
+  listaPeliculas[posicionPeliBuscada].genero = genero.value;
+  //actualizar el localstorage
+  guardarPeliculasEnLocalStorage()
+  //actualizar la tabla
+  borrarTabla();
+  cargarInicial();
+  //mostrar un mensaje intuitivo para el usuario
+  Swal.fire(
+    'Pelicula actualizada',
+    'Los datos de la pelicula seleccionada fueron actualizados',
+    'success'
+  )
+  //cerrar la ventana modal
+  modalAdminPelicula.hide();
+  //limpiar el formulario
+  limpiarFormulario();
 
 }
-
 cargaInicial();
