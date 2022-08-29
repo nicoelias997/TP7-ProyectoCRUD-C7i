@@ -101,12 +101,21 @@ btnCrearPelicula.addEventListener('click', crearPelicula);
 formPelicula.addEventListener('submit', guardarPelicula);
 
 function crearPelicula(){
-    //mostrar ventana modal
-    modalAdminPelicula.show();
-    //generar el identificador unico y asignarlo al campo del codigo
-    codigo.value = uuidv4();
-    // console.log( uuidv4()); esta libreria genera identificadores unicos
-}   
+  borrarTabla();
+  cargarInicial();
+  //mostrar un mensaje intuitivo para el usuario
+  Swal.fire(
+    'Pelicula actualizada',
+    'Los datos de la pelicula seleccionada fueron actualizados',
+    'success'
+  )
+  //cerrar la ventana modal
+  modalAdminPelicula.hide();
+  //limpiar el formulario
+  limpiarFormulario();
+
+}
+
 
 function guardarPelicula(e){
     e.preventDefault();
