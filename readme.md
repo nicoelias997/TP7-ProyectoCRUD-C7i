@@ -10,7 +10,7 @@ En este proyecto implementamos javascript,html, css para crear un CRUD de pelicu
 
 <!--Cada vez que quieramos agregar alguna cosa, cada cosa tiene un signo distinto, para eso instalamos una extension, llamada docs-markdown-->
 
-<!--Para llamar a docs-markdown, lo llamamos mediante ctrl+m-->
+<!--Para llamar a docs-markdown, lo llamamos mediante alt+m-->
 
 ## Librerias utilizadas
 
